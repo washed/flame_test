@@ -1,35 +1,35 @@
 import 'package:flame/events.dart';
 import 'package:flame_test/tower.dart';
-import 'package:flame_test/player.dart';
+import 'package:flame_test/creep.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 
 class SpaceShooterGame extends FlameGame
     with PanDetector, HasCollisionDetection {
-  late Player player;
+  late Creep creep;
   late Tower tower;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    player = Player();
+    creep = Creep();
     tower = Tower(
-      target: player,
+      target: creep,
       fireRange: 200,
       acquisitionRange: 400,
       renderRanges: true,
     );
 
     add(ScreenHitbox());
-    add(player);
+    add(creep);
     add(tower);
   }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.game);
+    creep.move(info.delta.game);
   }
 }
 

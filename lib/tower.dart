@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame_test/main.dart';
 import 'package:flame/effects.dart';
 import 'package:flame_test/move_extension.dart';
-import 'package:flame_test/player.dart';
+import 'package:flame_test/creep.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/collisions.dart';
 
@@ -151,13 +151,13 @@ class Bullet extends SpriteComponent
   }
 
   @override
-  void onCollision(Set<Vector2> points, PositionComponent other) {
-    super.onCollision(points, other);
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
 
     if (other is ScreenHitbox) {
       add(RemoveEffect());
-    } else if (other is Player) {
-      debugPrint("Hit player!");
+    } else if (other is Creep) {
+      debugPrint("Hit creep!");
       add(RemoveEffect());
     }
   }
