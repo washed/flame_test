@@ -145,7 +145,6 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
 
     sprite = await gameRef.loadSprite("player-sprite.png");
 
-    position = Vector2(1000, 1000);
     anchor = Anchor.center;
     width = 25;
     height = 50;

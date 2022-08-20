@@ -11,6 +11,8 @@ class Healthbar extends PositionComponent {
 
   late RectangleComponent healthRect;
 
+  // TODO: make this not affected by turning the parent or similar
+
   @override
   Future<void> onLoad() async {
     final frameRect = RectangleComponent(
@@ -58,7 +60,6 @@ class Creep extends SpriteComponent
 
     sprite = await gameRef.loadSprite("player-sprite.png");
 
-    position = gameRef.size / 2;
     width = 50;
     height = 100;
     anchor = Anchor.center;
