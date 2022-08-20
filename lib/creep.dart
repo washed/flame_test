@@ -3,9 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame_test/main.dart';
 import 'package:flame_test/tower.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 class Healthbar extends PositionComponent {
   double health = 1.0;
@@ -73,6 +71,11 @@ class Creep extends SpriteComponent
 
     add(RectangleHitbox());
     add(healthbar);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
   }
 
   void move(Vector2 delta) {

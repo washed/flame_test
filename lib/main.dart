@@ -14,13 +14,16 @@ class SpaceShooterGame extends FlameGame
   Future<void> onLoad() async {
     await super.onLoad();
 
+    // debugMode = true;
+
     creep = Creep();
     tower = Tower(
-      target: creep,
-      fireRange: 200,
+      firingRange: 200,
       acquisitionRange: 400,
-      renderRanges: true,
     );
+
+    children.register<Creep>();
+    children.register<Tower>();
 
     add(ScreenHitbox());
     add(creep);
