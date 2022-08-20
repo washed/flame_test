@@ -6,17 +6,19 @@ import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 
 class SpaceShooterGame extends FlameGame
-    with PanDetector, HasCollisionDetection {
+    with PanDetector, HasCollisionDetection, HasDraggables {
   late Creep creep;
+  late Creep creep2;
   late Tower tower;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    // debugMode = true;
+    debugMode = false;
 
     creep = Creep();
+    creep2 = Creep();
     tower = Tower(
       firingRange: 200,
       acquisitionRange: 400,
@@ -27,12 +29,8 @@ class SpaceShooterGame extends FlameGame
 
     add(ScreenHitbox());
     add(creep);
+    add(creep2);
     add(tower);
-  }
-
-  @override
-  void onPanUpdate(DragUpdateInfo info) {
-    creep.move(info.delta.game);
   }
 }
 

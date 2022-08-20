@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/collisions.dart';
 
 class TargetAcquisition extends PositionComponent
-    with HasGameRef<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame>, ParentIsA<Tower> {
   final double acquisitionRange;
   final double firingRange;
   final double angleDeadzone;
@@ -79,21 +79,24 @@ class TargetAcquisition extends PositionComponent
       : false;
 
   bool get closestAcquiredTargetInFiringAngle =>
-      (angleErrorToClosestAcquiredTarget != null)
-          ? angleErrorToClosestAcquiredTarget!.abs() < angleDeadzone
+      (angleErrorToClosestAcquiredTarget() != null)
+          ? angleErrorToClosestAcquiredTarget()!.abs() < angleDeadzone
           : false;
 
   bool get closestAcquiredTargetHasFiringSolution =>
       closestAcquiredTargetInFiringRange && closestAcquiredTargetInFiringAngle;
 
-  double? get angleErrorToClosestAcquiredTarget {
+  double? angleErrorToClosestAcquiredTarget() {
     if (closestAcquiredTarget != null) {
-      return (closestAcquiredTarget!.absolutePosition - absolutePosition)
-              .angleToSigned(Vector2(
-            cos(absoluteAngle),
-            sin(absoluteAngle),
-          )) -
-          pi / 2;
+      final deltaPosition =
+          closestAcquiredTarget!.absolutePosition - absolutePosition;
+
+      final myVector = Vector2(
+        sin(absoluteAngle),
+        -cos(absoluteAngle),
+      );
+
+      return deltaPosition.angleToSigned(myVector);
     }
     return null;
   }
@@ -140,8 +143,6 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    debugMode = true;
-
     sprite = await gameRef.loadSprite("player-sprite.png");
 
     position = Vector2(1000, 1000);
@@ -162,12 +163,11 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   void turnToTarget(double dt) {
     // TODO: we should probably refactor this into an effect or similar
 
-    final angleError = targetAcquisition.angleErrorToClosestAcquiredTarget;
+    final angleError = targetAcquisition.angleErrorToClosestAcquiredTarget();
     final solution = targetAcquisition.closestAcquiredTargetInFiringAngle;
+    final angleDelta = turnRate * dt;
 
     if (angleError != null) {
-      final angleDelta = turnRate * dt;
-
       if (!solution) {
         if (angleError > 0) {
           angle -= angleDelta;

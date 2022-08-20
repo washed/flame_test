@@ -1,9 +1,10 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/input.dart';
 import 'package:flame_test/main.dart';
 import 'package:flame_test/tower.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Draggable;
 
 class Healthbar extends PositionComponent {
   double health = 1.0;
@@ -17,7 +18,6 @@ class Healthbar extends PositionComponent {
       paint: Paint()
         ..color = Colors.white70
         ..style = PaintingStyle.stroke,
-      // priority: 0,
       anchor: Anchor.centerLeft,
     );
 
@@ -27,7 +27,6 @@ class Healthbar extends PositionComponent {
       paint: Paint()
         ..color = Colors.green
         ..style = PaintingStyle.fill,
-      // priority: 1,
       anchor: Anchor.centerLeft,
     );
 
@@ -44,7 +43,7 @@ class Healthbar extends PositionComponent {
 }
 
 class Creep extends SpriteComponent
-    with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
+    with HasGameRef<SpaceShooterGame>, CollisionCallbacks, Draggable {
   static const int maxHealth = 1000;
   int health = maxHealth;
   late Healthbar healthbar;
@@ -103,5 +102,35 @@ class Creep extends SpriteComponent
       debugPrint("Got hit by a bullet!");
       getHit(Bullet.damage);
     }
+  }
+
+  Vector2? dragDeltaPosition;
+  bool get isDragging => dragDeltaPosition != null;
+
+  @override
+  bool onDragStart(DragStartInfo info) {
+    dragDeltaPosition = info.eventPosition.game - position;
+    return false;
+  }
+
+  @override
+  bool onDragUpdate(DragUpdateInfo info) {
+    if (isDragging) {
+      final localCoords = info.eventPosition.game;
+      position = localCoords - dragDeltaPosition!;
+    }
+    return false;
+  }
+
+  @override
+  bool onDragEnd(DragEndInfo info) {
+    dragDeltaPosition = null;
+    return false;
+  }
+
+  @override
+  bool onDragCancel() {
+    dragDeltaPosition = null;
+    return false;
   }
 }
