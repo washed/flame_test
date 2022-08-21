@@ -73,10 +73,12 @@ class Creep extends SpriteComponent
     add(healthbar);
   }
 
+  /*
   @override
   void update(double dt) {
     super.update(dt);
   }
+  */
 
   void move(Vector2 delta) {
     position.add(delta);

@@ -1,7 +1,5 @@
-import 'package:flame/src/effects/controllers/effect_controller.dart';
-import 'package:flame/src/effects/move_effect.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 
 class MoveInDirectionEffect extends MoveEffect {
   MoveInDirectionEffect(
