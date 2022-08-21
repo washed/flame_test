@@ -8,6 +8,79 @@ import 'package:flame_test/creep.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/collisions.dart';
 
+class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
+  final double firingRange;
+  final double acquisitionRange;
+
+  final double turnRate = 1; // rad/s
+
+  late TargetAcquisition targetAcquisition;
+
+  Tower({
+    required this.firingRange,
+    required this.acquisitionRange,
+  });
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+
+    sprite = await gameRef.loadSprite("player-sprite.png");
+
+    anchor = Anchor.center;
+    width = 25;
+    height = 50;
+
+    targetAcquisition = TargetAcquisition(
+      acquisitionRange: acquisitionRange,
+      firingRange: firingRange,
+      angleDeadzone: 0.025,
+    )
+      ..anchor = Anchor.center
+      ..position = Vector2(width / 2, height / 2);
+    add(targetAcquisition);
+  }
+
+  void turnToTarget(double dt) {
+    // TODO: we should probably refactor this into an effect or similar
+
+    final angleError = targetAcquisition.angleErrorToClosestAcquiredTarget();
+    final solution = targetAcquisition.closestAcquiredTargetInFiringAngle;
+    final angleDelta = turnRate * dt;
+
+    if (angleError != null) {
+      if (!solution) {
+        if (angleError > 0) {
+          angle -= angleDelta;
+        } else {
+          angle += angleDelta;
+        }
+      }
+    }
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    turnToTarget(dt);
+    maybeShoot(dt);
+  }
+
+  double lastShotDt = 0.0;
+
+  void maybeShoot(double dt) {
+    if (lastShotDt > 0) {
+      lastShotDt -= dt;
+    } else if (targetAcquisition.closestAcquiredTargetHasFiringSolution) {
+      parent?.add(Bullet(target: targetAcquisition.closestAcquiredTarget!)
+        ..position = position
+        ..angle = angle);
+      lastShotDt = 1.0;
+    }
+  }
+}
+
 class TargetAcquisition extends PositionComponent
     with HasGameRef<SpaceShooterGame>, ParentIsA<Tower> {
   final double acquisitionRange;
@@ -124,86 +197,7 @@ class TargetAcquisition extends PositionComponent
   }
 }
 
-class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
-  final double firingRange;
-  final double acquisitionRange;
-
-  final double turnRate = 1; // rad/s
-
-  PositionComponent? target;
-
-  late TargetAcquisition targetAcquisition;
-
-  Tower({
-    required this.firingRange,
-    required this.acquisitionRange,
-  });
-
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-
-    sprite = await gameRef.loadSprite("player-sprite.png");
-
-    anchor = Anchor.center;
-    width = 25;
-    height = 50;
-
-    targetAcquisition = TargetAcquisition(
-      acquisitionRange: acquisitionRange,
-      firingRange: firingRange,
-      angleDeadzone: 0.025,
-    )
-      ..anchor = Anchor.center
-      ..position = Vector2(width / 2, height / 2);
-    add(targetAcquisition);
-  }
-
-  void turnToTarget(double dt) {
-    // TODO: we should probably refactor this into an effect or similar
-
-    final angleError = targetAcquisition.angleErrorToClosestAcquiredTarget();
-    final solution = targetAcquisition.closestAcquiredTargetInFiringAngle;
-    final angleDelta = turnRate * dt;
-
-    if (angleError != null) {
-      if (!solution) {
-        if (angleError > 0) {
-          angle -= angleDelta;
-        } else {
-          angle += angleDelta;
-        }
-      }
-    }
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-
-    turnToTarget(dt);
-    maybeShoot(dt);
-
-    target = targetAcquisition.closestAcquiredTarget;
-  }
-
-  double lastShotDt = 0.0;
-
-  void maybeShoot(double dt) {
-    if (lastShotDt > 0) {
-      lastShotDt -= dt;
-    } else if (targetAcquisition.closestAcquiredTargetHasFiringSolution) {
-      parent?.add(Bullet(
-        target: target!,
-      )
-        ..position = position
-        ..angle = angle);
-      lastShotDt = 1.0;
-    }
-  }
-}
-
-class Bullet extends SpriteComponent
+class Bullet extends CircleComponent
     with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
   final PositionComponent target;
   final double velocity;
@@ -218,20 +212,18 @@ class Bullet extends SpriteComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await gameRef.loadSprite("player-sprite.png");
-
-    width = 10;
-    height = 15;
+    radius = 5;
     anchor = Anchor.center;
 
-    final moveVector = target.position - position;
+    paint = Paint()
+      ..color = Colors.purpleAccent
+      ..style = PaintingStyle.fill;
 
     final hitbox = RectangleHitbox();
-
     add(hitbox);
 
     final moveEffect = MoveInDirectionEffect(
-      moveVector,
+      target.position - position,
       EffectController(
         speed: velocity,
         infinite: true,

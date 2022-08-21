@@ -23,13 +23,18 @@ class SpaceShooterGame extends FlameGame
       ..position = Vector2(900, 200)
       ..angle = pi;
 
-    creep1.add(MoveEffect.by(
-        Vector2(0, 1000),
-        EffectController(
-          duration: 10,
-          reverseDuration: 10,
-          infinite: true,
-        )));
+    final creepPath = Path();
+    creepPath.lineTo(500, 100);
+    creepPath.lineTo(500, 500);
+    creepPath.lineTo(200, 500);
+    creepPath.lineTo(200, 1000);
+
+    final creepPathMoveEffect = MoveAlongPathEffect(
+      creepPath,
+      EffectController(speed: 100),
+    );
+
+    creep1.add(creepPathMoveEffect);
 
     final creep2 = Creep()
       ..position = Vector2(900, 100)
