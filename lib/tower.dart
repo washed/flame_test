@@ -1,14 +1,17 @@
 import 'dart:math';
 
+import 'package:flame/input.dart';
+import 'package:flutter/material.dart' hide Draggable;
+
 import 'package:flame/components.dart';
 import 'package:flame_test/main.dart';
 import 'package:flame/effects.dart';
 import 'package:flame_test/move_extension.dart';
 import 'package:flame_test/creep.dart';
-import 'package:flutter/material.dart';
 import 'package:flame/collisions.dart';
 
-class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
+class Tower extends SpriteComponent
+    with HasGameRef<SpaceShooterGame>, Draggable {
   static const double turnRate = 1; // rad/s
   static const double angleDeadzone = 0.025;
 
@@ -75,6 +78,36 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
         ..angle = angle);
       lastShotDt = 1.0;
     }
+  }
+
+  Vector2? dragDeltaPosition;
+  bool get isDragging => dragDeltaPosition != null;
+
+  @override
+  bool onDragStart(DragStartInfo info) {
+    dragDeltaPosition = info.eventPosition.game - position;
+    return false;
+  }
+
+  @override
+  bool onDragUpdate(DragUpdateInfo info) {
+    if (isDragging) {
+      final localCoords = info.eventPosition.game;
+      position = localCoords - dragDeltaPosition!;
+    }
+    return false;
+  }
+
+  @override
+  bool onDragEnd(DragEndInfo info) {
+    dragDeltaPosition = null;
+    return false;
+  }
+
+  @override
+  bool onDragCancel() {
+    dragDeltaPosition = null;
+    return false;
   }
 }
 
