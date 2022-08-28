@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:flame/components.dart';
+
+// Project imports:
 import 'package:flame_test/add_tower/add_tower.dart';
 import 'package:flame_test/add_tower/text_button.dart';
 import 'package:flame_test/tower.dart';

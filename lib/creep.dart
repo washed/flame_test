@@ -1,10 +1,15 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/input.dart';
+
+// Project imports:
 import 'package:flame_test/main.dart';
 import 'package:flame_test/tower.dart';
-import 'package:flutter/material.dart';
 
 class Healthbar extends PositionComponent {
   double health = 1.0;

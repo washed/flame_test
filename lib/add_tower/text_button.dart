@@ -1,12 +1,16 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
-import 'package:flutter/material.dart';
 
 class TextButtonComponent extends ButtonComponent
     with HasGameRef, ComponentViewportMargin {
-  TextButtonComponent({required text}) {
-    final Vector2 size = Vector2(120, 40);
-
+  static PositionComponent getButtonComponent({
+    required String text,
+    required Vector2 size,
+  }) {
     final TextComponent buttonText = TextComponent(
       text: text,
       position: size / 2,
@@ -22,6 +26,13 @@ class TextButtonComponent extends ButtonComponent
           ..color = Colors.blue,
         children: [buttonText]);
 
+    return buttonComponent;
+  }
+
+  static PositionComponent getButtonDownComponent({
+    required String text,
+    required Vector2 size,
+  }) {
     final TextComponent buttonDownText = TextComponent(
       text: text,
       position: size / 2,
@@ -37,8 +48,23 @@ class TextButtonComponent extends ButtonComponent
           ..color = Colors.blue,
         children: [buttonDownText]);
 
-    button = buttonComponent;
-    buttonDown = buttonDownComponent;
+    return buttonDownComponent;
+  }
+
+  TextButtonComponent({
+    required String text,
+    double width = 120,
+    double height = 40,
+  }) : super(
+          button: getButtonComponent(
+            size: Vector2(width, height),
+            text: text,
+          ),
+          buttonDown: getButtonDownComponent(
+            size: Vector2(width, height),
+            text: text,
+          ),
+        ) {
     anchor = Anchor.topLeft;
   }
 }

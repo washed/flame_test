@@ -1,27 +1,14 @@
+// Package imports:
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/input.dart';
+
+// Project imports:
 import 'package:flame_test/add_tower/add_tower.dart';
-import 'package:flutter/material.dart';
+import 'package:flame_test/add_tower/text_button.dart';
 
-class PlaceTowerButton extends ButtonComponent
-    with HasGameRef, ComponentViewportMargin, ParentIsA<AddTowerComponent> {
-  static TextComponent buttonText = TextComponent(text: "Place tower");
-  static RectangleComponent buttonComponent = RectangleComponent(
-      size: Vector2(200, 50),
-      paint: Paint()
-        ..style = PaintingStyle.stroke
-        ..color = Colors.blue,
-      children: [buttonText]);
-  static RectangleComponent buttonDownComponent = buttonComponent
-    ..paint.color = Colors.red;
-
-  PlaceTowerButton()
-      : super(
-          button: buttonComponent,
-          buttonDown: buttonDownComponent,
-          anchor: Anchor.topLeft,
-        );
+class PlaceTowerButton extends TextButtonComponent
+    with ParentIsA<AddTowerComponent> {
+  PlaceTowerButton() : super(text: "Place tower");
 
   @override
   Future<void> onLoad() async {
