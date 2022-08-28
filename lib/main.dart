@@ -14,7 +14,6 @@ import 'package:flame/game.dart';
 // Project imports:
 import 'package:flame_test/add_tower/add_tower.dart';
 import 'package:flame_test/creep.dart';
-import 'package:flame_test/tower.dart';
 
 class SpaceShooterGame extends FlameGame
     with
@@ -29,7 +28,6 @@ class SpaceShooterGame extends FlameGame
     debugMode = false;
 
     children.register<Creep>();
-    children.register<Tower>();
 
     final addTowerComponent = AddTowerComponent()..position = Vector2(50, 50);
     add(addTowerComponent);
@@ -63,25 +61,11 @@ class SpaceShooterGame extends FlameGame
           infinite: true,
         )));
 
-    /*
-    final tower1 = Tower(
-      firingRange: 200,
-      acquisitionRange: 250,
-    )..position = Vector2(800, 600);
-
-    final tower2 = Tower(
-      firingRange: 200,
-      acquisitionRange: 250,
-    )..position = Vector2(800, 800);
-    */
-
     add(ScreenHitbox());
 
     addAll([
       creep1,
       creep2,
-      // tower1,
-      // tower2,
     ]);
   }
 }

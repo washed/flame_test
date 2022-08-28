@@ -87,17 +87,10 @@ class Tower extends SpriteComponent
     }
   }
 
-  bool _isDragged = false;
-
   @override
-  void onDragStart(DragStartEvent event) => _isDragged = true;
-
-  @override
-  void onDragUpdate(DragUpdateEvent event) =>
-      !placed ? position += event.delta : null;
-
-  @override
-  void onDragEnd(DragEndEvent event) => _isDragged = false;
+  void onDragUpdate(DragUpdateEvent event) {
+    if (!placed) position += event.delta;
+  }
 }
 
 class TargetAcquisition extends PositionComponent

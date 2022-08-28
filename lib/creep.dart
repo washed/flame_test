@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/input.dart';
 
 // Project imports:
 import 'package:flame_test/main.dart';
