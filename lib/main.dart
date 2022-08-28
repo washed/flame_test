@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
+import 'package:flame_test/add_tower/add_tower.dart';
 import 'package:flame_test/tower.dart';
 import 'package:flame_test/creep.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 
 class SpaceShooterGame extends FlameGame
-    with PanDetector, HasCollisionDetection, HasDraggables {
+    with PanDetector, HasCollisionDetection, HasDraggables, HasTappables {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -18,6 +19,9 @@ class SpaceShooterGame extends FlameGame
 
     children.register<Creep>();
     children.register<Tower>();
+
+    final addTowerComponent = AddTowerComponent()..position = Vector2(50, 50);
+    add(addTowerComponent);
 
     final creep1 = Creep()
       ..position = Vector2(900, 200)
@@ -48,6 +52,7 @@ class SpaceShooterGame extends FlameGame
           infinite: true,
         )));
 
+    /*
     final tower1 = Tower(
       firingRange: 200,
       acquisitionRange: 250,
@@ -57,14 +62,15 @@ class SpaceShooterGame extends FlameGame
       firingRange: 200,
       acquisitionRange: 250,
     )..position = Vector2(800, 800);
+    */
 
     add(ScreenHitbox());
 
     addAll([
       creep1,
       creep2,
-      tower1,
-      tower2,
+      // tower1,
+      // tower2,
     ]);
   }
 }

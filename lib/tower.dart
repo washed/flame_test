@@ -17,6 +17,8 @@ class Tower extends SpriteComponent
 
   final TargetAcquisition targetAcquisition;
 
+  bool placed = false;
+
   Tower({
     required double firingRange,
     required double acquisitionRange,
@@ -85,28 +87,36 @@ class Tower extends SpriteComponent
 
   @override
   bool onDragStart(DragStartInfo info) {
-    dragDeltaPosition = info.eventPosition.game - position;
+    if (!placed) {
+      dragDeltaPosition = info.eventPosition.game - position;
+    }
     return false;
   }
 
   @override
   bool onDragUpdate(DragUpdateInfo info) {
-    if (isDragging) {
-      final localCoords = info.eventPosition.game;
-      position = localCoords - dragDeltaPosition!;
+    if (!placed) {
+      if (isDragging) {
+        final localCoords = info.eventPosition.game;
+        position = localCoords - dragDeltaPosition!;
+      }
     }
     return false;
   }
 
   @override
   bool onDragEnd(DragEndInfo info) {
-    dragDeltaPosition = null;
+    if (!placed) {
+      dragDeltaPosition = null;
+    }
     return false;
   }
 
   @override
   bool onDragCancel() {
-    dragDeltaPosition = null;
+    if (!placed) {
+      dragDeltaPosition = null;
+    }
     return false;
   }
 }
