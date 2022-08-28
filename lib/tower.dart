@@ -8,15 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/experimental.dart';
 
 // Project imports:
 import 'package:flame_test/creep.dart';
 import 'package:flame_test/main.dart';
 import 'package:flame_test/move_extension.dart';
 
-class Tower extends SpriteComponent
-    with HasGameRef<SpaceShooterGame>, DragCallbacks {
+class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   static const double turnRate = 1; // rad/s
   static const double angleDeadzone = 0.025;
 
@@ -85,11 +83,6 @@ class Tower extends SpriteComponent
         ..angle = angle);
       lastShotDt = 1.0;
     }
-  }
-
-  @override
-  void onDragUpdate(DragUpdateEvent event) {
-    if (!placed) position += event.delta;
   }
 }
 

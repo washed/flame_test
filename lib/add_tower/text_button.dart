@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 
-class TextButtonComponent extends ButtonComponent
-    with HasGameRef, ComponentViewportMargin {
+class TextButtonComponent extends ButtonComponent {
   static PositionComponent getButtonComponent({
     required String text,
     required Vector2 size,
@@ -53,8 +52,8 @@ class TextButtonComponent extends ButtonComponent
 
   TextButtonComponent({
     required String text,
-    double width = 120,
-    double height = 40,
+    double width = 80,
+    double height = 30,
   }) : super(
           button: getButtonComponent(
             size: Vector2(width, height),

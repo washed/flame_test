@@ -2,6 +2,7 @@
 import 'dart:math';
 
 // Flutter imports:
+import 'package:flame_test/grid.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -21,6 +22,7 @@ class SpaceShooterGame extends FlameGame
         HasCollisionDetection,
         HasDraggableComponents,
         HasTappables {
+  late GridComponent grid;
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -29,8 +31,20 @@ class SpaceShooterGame extends FlameGame
 
     children.register<Creep>();
 
-    final addTowerComponent = AddTowerComponent()..position = Vector2(50, 50);
+    add(ScreenHitbox());
+
+    grid = GridComponent()
+      ..edgeSize = 50
+      ..nodesHeight = 10
+      ..nodesWidth = 10
+      ..position = Vector2(0, 80);
+
+    add(grid);
+
+    final addTowerComponent = AddTowerComponent();
     add(addTowerComponent);
+
+    /*
 
     final creep1 = Creep()
       ..position = Vector2(900, 200)
@@ -61,12 +75,11 @@ class SpaceShooterGame extends FlameGame
           infinite: true,
         )));
 
-    add(ScreenHitbox());
-
     addAll([
       creep1,
       creep2,
     ]);
+    */
   }
 }
 
