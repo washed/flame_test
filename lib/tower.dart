@@ -9,17 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:flame/collisions.dart';
 
 class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
-  final double firingRange;
-  final double acquisitionRange;
+  static const double turnRate = 1; // rad/s
+  static const double angleDeadzone = 0.025;
 
-  final double turnRate = 1; // rad/s
-
-  late TargetAcquisition targetAcquisition;
+  final TargetAcquisition targetAcquisition;
 
   Tower({
-    required this.firingRange,
-    required this.acquisitionRange,
-  });
+    required double firingRange,
+    required double acquisitionRange,
+  }) : targetAcquisition = TargetAcquisition(
+          acquisitionRange: acquisitionRange,
+          firingRange: firingRange,
+          angleDeadzone: angleDeadzone,
+        )..anchor = Anchor.center;
 
   @override
   Future<void> onLoad() async {
@@ -31,13 +33,8 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
     width = 25;
     height = 50;
 
-    targetAcquisition = TargetAcquisition(
-      acquisitionRange: acquisitionRange,
-      firingRange: firingRange,
-      angleDeadzone: 0.025,
-    )
-      ..anchor = Anchor.center
-      ..position = Vector2(width / 2, height / 2);
+    targetAcquisition.position = Vector2(width / 2, height / 2);
+
     add(targetAcquisition);
   }
 
