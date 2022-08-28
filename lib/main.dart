@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
 // Project imports:
@@ -16,7 +17,11 @@ import 'package:flame_test/creep.dart';
 import 'package:flame_test/tower.dart';
 
 class SpaceShooterGame extends FlameGame
-    with PanDetector, HasCollisionDetection, HasDraggables, HasTappables {
+    with
+        PanDetector,
+        HasCollisionDetection,
+        HasDraggableComponents,
+        HasTappables {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

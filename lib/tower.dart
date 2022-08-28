@@ -2,13 +2,13 @@
 import 'dart:math';
 
 // Flutter imports:
-import 'package:flutter/material.dart' hide Draggable;
+import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/input.dart';
+import 'package:flame/experimental.dart';
 
 // Project imports:
 import 'package:flame_test/creep.dart';
@@ -16,7 +16,7 @@ import 'package:flame_test/main.dart';
 import 'package:flame_test/move_extension.dart';
 
 class Tower extends SpriteComponent
-    with HasGameRef<SpaceShooterGame>, Draggable {
+    with HasGameRef<SpaceShooterGame>, DragCallbacks {
   static const double turnRate = 1; // rad/s
   static const double angleDeadzone = 0.025;
 
@@ -87,43 +87,17 @@ class Tower extends SpriteComponent
     }
   }
 
-  Vector2? dragDeltaPosition;
-  bool get isDragging => dragDeltaPosition != null;
+  bool _isDragged = false;
 
   @override
-  bool onDragStart(DragStartInfo info) {
-    if (!placed) {
-      dragDeltaPosition = info.eventPosition.game - position;
-    }
-    return false;
-  }
+  void onDragStart(DragStartEvent event) => _isDragged = true;
 
   @override
-  bool onDragUpdate(DragUpdateInfo info) {
-    if (!placed) {
-      if (isDragging) {
-        final localCoords = info.eventPosition.game;
-        position = localCoords - dragDeltaPosition!;
-      }
-    }
-    return false;
-  }
+  void onDragUpdate(DragUpdateEvent event) =>
+      !placed ? position += event.delta : null;
 
   @override
-  bool onDragEnd(DragEndInfo info) {
-    if (!placed) {
-      dragDeltaPosition = null;
-    }
-    return false;
-  }
-
-  @override
-  bool onDragCancel() {
-    if (!placed) {
-      dragDeltaPosition = null;
-    }
-    return false;
-  }
+  void onDragEnd(DragEndEvent event) => _isDragged = false;
 }
 
 class TargetAcquisition extends PositionComponent
