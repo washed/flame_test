@@ -1,13 +1,20 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+class GridCoord {
+  final int x;
+  final int y;
+
+  GridCoord(this.x, this.y)
+      : assert(x >= 0),
+        assert(y >= 0);
+}
+
 class GridNodeComponent extends RectangleComponent {
-  final int hIndex;
-  final int vIndex;
+  GridCoord coords;
 
   GridNodeComponent({
-    required this.hIndex,
-    required this.vIndex,
+    required this.coords,
     required double edgeSize,
   }) : super(
           size: Vector2(edgeSize, edgeSize),
@@ -15,8 +22,8 @@ class GridNodeComponent extends RectangleComponent {
             ..style = PaintingStyle.stroke
             ..color = Colors.grey,
           position: Vector2(
-            hIndex * edgeSize,
-            vIndex * edgeSize,
+            coords.x * edgeSize,
+            coords.y * edgeSize,
           ),
         );
 }
@@ -34,8 +41,10 @@ class GridComponent extends PositionComponent {
       final List<GridNodeComponent> row = [];
       for (int vNodeIndex = 0; vNodeIndex < nodesHeight; vNodeIndex++) {
         final newNode = GridNodeComponent(
-          hIndex: hNodeIndex,
-          vIndex: vNodeIndex,
+          coords: GridCoord(
+            hNodeIndex,
+            vNodeIndex,
+          ),
           edgeSize: edgeSize,
         );
         row.add(newNode);
@@ -61,5 +70,21 @@ class GridComponent extends PositionComponent {
     }
 
     return component.position;
+  }
+
+  Path getPathFromCoords(List<GridCoord> coords) {
+    final path = Path();
+    for (final coord in coords) {
+      if (coord.x < nodesWidth && coord.y < nodesWidth) {
+        final node = nodes[coord.x][coord.y];
+        final nodePosition = node.absoluteCenter;
+
+        path.lineTo(
+          nodePosition.x,
+          nodePosition.y,
+        );
+      }
+    }
+    return path;
   }
 }

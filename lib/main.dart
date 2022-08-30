@@ -44,6 +44,26 @@ class SpaceShooterGame extends FlameGame
     final addTowerComponent = AddTowerComponent();
     add(addTowerComponent);
 
+    final creepPath = grid.getPathFromCoords([
+      GridCoord(0, 0),
+      GridCoord(5, 0),
+      GridCoord(5, 3),
+      GridCoord(2, 3),
+      GridCoord(2, 6),
+      GridCoord(9, 6),
+    ]);
+
+    final creep1 = Creep();
+
+    final creepPathMoveEffect = MoveAlongPathEffect(
+      creepPath,
+      EffectController(speed: 100),
+    );
+
+    creep1.add(creepPathMoveEffect);
+
+    add(creep1);
+
     /*
 
     final creep1 = Creep()
