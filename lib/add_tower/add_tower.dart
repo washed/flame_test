@@ -7,7 +7,6 @@ import 'package:flame/experimental.dart';
 import 'package:flame_test/add_tower/text_button.dart';
 import 'package:flame_test/main.dart';
 import 'package:flame_test/tower.dart';
-import 'package:flutter/material.dart';
 
 class DragShadow extends CircleComponent
     with HasGameRef<SpaceShooterGame>, DragCallbacks {
@@ -24,14 +23,14 @@ class DragShadow extends CircleComponent
 
   @override
   void onDragEnd(DragEndEvent event) {
-    // follow the towers position on dragEnd because it has probably snapped
+    // follow the towers position onDragEnd because it has probably snapped
     position = tower.position;
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
     position += event.delta;
-    tower.position = gameRef.grid.getSnapPosition(position);
+    tower.position = gameRef.grid.getSnapPosition(this);
   }
 }
 

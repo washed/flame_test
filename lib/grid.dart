@@ -1,47 +1,65 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+class GridNodeComponent extends RectangleComponent {
+  final int hIndex;
+  final int vIndex;
+
+  GridNodeComponent({
+    required this.hIndex,
+    required this.vIndex,
+    required double edgeSize,
+  }) : super(
+          size: Vector2(edgeSize, edgeSize),
+          paint: Paint()
+            ..style = PaintingStyle.stroke
+            ..color = Colors.grey,
+          position: Vector2(
+            hIndex * edgeSize,
+            vIndex * edgeSize,
+          ),
+        );
+}
+
 class GridComponent extends PositionComponent {
   late int nodesWidth;
   late int nodesHeight;
   late double edgeSize;
   late double snapFactor = 1.0;
+  late List<List<GridNodeComponent>> nodes = [];
 
   @override
   Future<void> onLoad() async {
     for (int hNodeIndex = 0; hNodeIndex < nodesWidth; hNodeIndex++) {
+      final List<GridNodeComponent> row = [];
       for (int vNodeIndex = 0; vNodeIndex < nodesHeight; vNodeIndex++) {
-        final newNode = RectangleComponent(
-            position: Vector2(
-              hNodeIndex * edgeSize,
-              vNodeIndex * edgeSize,
-            ),
-            size: Vector2(edgeSize, edgeSize),
-            paint: Paint()
-              ..style = PaintingStyle.stroke
-              ..color = Colors.grey);
+        final newNode = GridNodeComponent(
+          hIndex: hNodeIndex,
+          vIndex: vNodeIndex,
+          edgeSize: edgeSize,
+        );
+        row.add(newNode);
         add(newNode);
       }
+      nodes.add(row);
     }
   }
 
-  Vector2 getSnapPosition(Vector2 position) {
-    // TODO: might be more efficient to directly calculate the matching node
+  Vector2 getSnapPosition(PositionComponent component) {
+    final relativePosition = component.absolutePosition - absolutePosition;
+    final int hIndex = relativePosition.x ~/ edgeSize;
+    final int vIndex = relativePosition.y ~/ edgeSize;
 
-    try {
-      final node = children
-          .whereType<PositionComponent>()
-          .where((element) => element.containsPoint(position))
-          .single;
-      if ((node.absoluteCenter - position).length < snapFactor * edgeSize) {
-        debugPrint("Snapped!");
+    if (0 <= hIndex &&
+        hIndex < nodesWidth &&
+        0 <= vIndex &&
+        vIndex < nodesHeight) {
+      final node = nodes[hIndex][vIndex];
+      if ((node.center - relativePosition).length < snapFactor * edgeSize) {
         return node.absoluteCenter;
-      } else {
-        return position;
       }
-    } catch (e) {
-      if (e is StateError) return position;
-      rethrow;
     }
+
+    return component.position;
   }
 }
