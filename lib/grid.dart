@@ -1,5 +1,8 @@
-import 'package:flame/components.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flame/components.dart';
 
 class GridCoord {
   final int x;
@@ -72,18 +75,22 @@ class GridComponent extends PositionComponent {
     return component.position;
   }
 
+  Vector2 getPositionFromCoords(GridCoord coord) {
+    if (coord.x < nodesWidth && coord.y < nodesWidth) {
+      final node = nodes[coord.x][coord.y];
+      return node.absoluteCenter;
+    }
+    throw IndexError;
+  }
+
   Path getPathFromCoords(List<GridCoord> coords) {
     final path = Path();
     for (final coord in coords) {
-      if (coord.x < nodesWidth && coord.y < nodesWidth) {
-        final node = nodes[coord.x][coord.y];
-        final nodePosition = node.absoluteCenter;
-
-        path.lineTo(
-          nodePosition.x,
-          nodePosition.y,
-        );
-      }
+      final nodeAbsoluteCenter = getPositionFromCoords(coord);
+      path.lineTo(
+        nodeAbsoluteCenter.x - nodes[0][0].absoluteCenter.x,
+        nodeAbsoluteCenter.y - nodes[0][0].absoluteCenter.y,
+      );
     }
     return path;
   }

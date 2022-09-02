@@ -53,6 +53,8 @@ class Creep extends SpriteComponent
   static const int maxHealth = 1000;
   int health = maxHealth;
   late Healthbar healthbar;
+  late Path path;
+  late double startMovingDelay;
 
   bool _targettable = true;
 
@@ -77,15 +79,22 @@ class Creep extends SpriteComponent
     add(healthbar);
   }
 
-  /*
   @override
   void update(double dt) {
     super.update(dt);
-  }
-  */
 
-  void move(Vector2 delta) {
-    position.add(delta);
+    if (startMovingDelay > 0.0) {
+      startMovingDelay -= dt;
+      if (startMovingDelay <= 0.0) {
+        startMovingDelay = 0.0;
+        final moveEffect = MoveAlongPathEffect(
+          path,
+          EffectController(speed: 100),
+          absolute: false,
+        );
+        add(moveEffect);
+      }
+    }
   }
 
   void getHit(int damage) {
