@@ -56,6 +56,7 @@ class SpaceShooterGame extends FlameGame
     ]);
 
     final creepSpawner = CreepSpawner()
+      ..firstSpawnDelay = 5.0
       ..creepCount = 10
       ..creepPath = creepPath
       ..gridPosition = GridCoord(0, 0)

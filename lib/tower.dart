@@ -15,10 +15,12 @@ import 'package:flame_test/main.dart';
 import 'package:flame_test/move_extension.dart';
 
 class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
-  static const double turnRate = 1; // rad/s
   static const double angleDeadzone = 0.025;
 
   final TargetAcquisition targetAcquisition;
+
+  late double fireRate;
+  late double turnRate = 1.0; // rad/s
 
   bool placed = false;
 
@@ -48,18 +50,15 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
 
   void turnToTarget(double dt) {
     // TODO: we should probably refactor this into an effect or similar
-
     final angleError = targetAcquisition.angleErrorToClosestAcquiredTarget();
-    final solution = targetAcquisition.closestAcquiredTargetInFiringAngle;
-    final angleDelta = turnRate * dt;
 
     if (angleError != null) {
+      final solution = targetAcquisition.closestAcquiredTargetInFiringAngle;
+
       if (!solution) {
-        if (angleError > 0) {
-          angle -= angleDelta;
-        } else {
-          angle += angleDelta;
-        }
+        final maxAngleDelta = turnRate * dt;
+        final angleDelta = angleError.clamp(-maxAngleDelta, maxAngleDelta);
+        angle -= angleDelta;
       }
     }
   }
@@ -68,8 +67,10 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   void update(double dt) {
     super.update(dt);
 
-    turnToTarget(dt);
-    maybeShoot(dt);
+    if (placed) {
+      turnToTarget(dt);
+      maybeShoot(dt);
+    }
   }
 
   double lastShotDt = 0.0;
@@ -81,7 +82,7 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
       parent?.add(Bullet(target: targetAcquisition.closestAcquiredTarget!)
         ..position = position
         ..angle = angle);
-      lastShotDt = 1.0;
+      lastShotDt = 1 / fireRate;
     }
   }
 }
@@ -206,7 +207,7 @@ class Bullet extends CircleComponent
     with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
   final PositionComponent target;
   final double velocity;
-  static const int damage = 50;
+  static const int damage = 100;
 
   Bullet({
     required this.target,

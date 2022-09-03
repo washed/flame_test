@@ -9,23 +9,27 @@ import 'package:flame_test/creep.dart';
 import 'package:flame_test/grid.dart';
 import 'package:flame_test/main.dart';
 
-class CreepSpawner extends PositionComponent with HasGameRef<SpaceShooterGame> {
+class CreepSpawner extends CircleComponent with HasGameRef<SpaceShooterGame> {
   late int creepCount;
   late double spawnPeriod;
+  late double firstSpawnDelay = 0.0;
   late Path creepPath;
   late GridCoord gridPosition;
 
-  double _tminusSpawn = 0.0;
+  double _tMinusSpawn = 0.0;
   int _creepSpawnCount = 0;
-  List<Creep> _creepsSpawned = [];
+  final List<Creep> _creepsSpawned = [];
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
     position = gameRef.grid.getPositionFromCoords(gridPosition);
-
+    radius = 10;
     anchor = Anchor.center;
+    paint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Colors.red;
   }
 
   @override
@@ -33,21 +37,25 @@ class CreepSpawner extends PositionComponent with HasGameRef<SpaceShooterGame> {
     super.update(dt);
 
     if (isMounted) {
-      _tminusSpawn -= dt;
-      if (_tminusSpawn <= 0.0) {
-        _tminusSpawn = spawnPeriod;
-        if (_creepSpawnCount < creepCount) {
-          final creep = Creep()
-            ..position = position
-            ..path = creepPath
-            ..startMovingDelay = 0.1;
+      if (firstSpawnDelay > 0.0) {
+        firstSpawnDelay -= dt;
+      } else {
+        _tMinusSpawn -= dt;
+        if (_tMinusSpawn <= 0.0) {
+          _tMinusSpawn = spawnPeriod;
+          if (_creepSpawnCount < creepCount) {
+            final creep = Creep()
+              ..position = position
+              ..path = creepPath
+              ..startMovingDelay = 0.1;
 
-          _creepsSpawned.add(creep);
+            _creepsSpawned.add(creep);
 
-          // TODO: maybe it is beneficial to add creeps to the spawner instead?
-          gameRef.add(creep);
+            // TODO: maybe it is beneficial to add creeps to the spawner instead?
+            gameRef.add(creep);
 
-          _creepSpawnCount++;
+            _creepSpawnCount++;
+          }
         }
       }
     }

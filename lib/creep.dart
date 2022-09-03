@@ -14,7 +14,7 @@ import 'package:flame_test/tower.dart';
 
 class Creep extends SpriteComponent
     with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
-  static const int maxHealth = 1000;
+  static const int maxHealth = 100;
   static const double moveSpeed = 250;
 
   final int baseDamage = 100;

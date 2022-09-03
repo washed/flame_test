@@ -40,6 +40,7 @@ class Base extends CircleComponent with CollisionCallbacks {
 
     if (health == 0) {
       debugPrint("Game over!");
+      // TODO: actually stop the game somehow
     }
   }
 

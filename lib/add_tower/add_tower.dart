@@ -64,7 +64,10 @@ class AddTowerComponent extends PositionComponent
       newTower = Tower(
         firingRange: 200,
         acquisitionRange: 250,
-      )..position = Vector2(200, 200);
+      )
+        ..position = Vector2(200, 200)
+        ..fireRate = 10.0
+        ..turnRate = 10.0;
 
       dragShadow = DragShadow(tower: newTower!);
 
