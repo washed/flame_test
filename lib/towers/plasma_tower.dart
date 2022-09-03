@@ -1,5 +1,5 @@
 // Project imports:
-import 'package:flame_test/components/tower.dart';
+import 'package:flame_test/components/tower/tower.dart';
 
 class PlasmaTower extends Tower {
   PlasmaTower()

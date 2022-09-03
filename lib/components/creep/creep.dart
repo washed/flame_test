@@ -9,7 +9,7 @@ import 'package:flame/effects.dart';
 // Project imports:
 import 'package:flame_test/components/base.dart';
 import 'package:flame_test/components/healthbar.dart';
-import 'package:flame_test/components/tower.dart';
+import 'package:flame_test/components/tower/bullet.dart';
 import 'package:flame_test/main.dart';
 
 class Creep extends SpriteComponent
