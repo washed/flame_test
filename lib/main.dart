@@ -48,7 +48,7 @@ class SpaceShooterGame extends FlameGame
     base = Base()..position = grid.getPositionFromCoords(GridCoord(9, 9));
     add(base);
 
-    final creepPath = grid.getPathFromCoords([
+    final pathGridCoords = [
       GridCoord(0, 0),
       GridCoord(5, 0),
       GridCoord(5, 3),
@@ -56,7 +56,18 @@ class SpaceShooterGame extends FlameGame
       GridCoord(2, 6),
       GridCoord(9, 6),
       GridCoord(9, 9),
-    ]);
+    ];
+
+    final interpolateGridCoords = grid.interpolateGridCoords(pathGridCoords);
+
+    for (final pathGridCoord in interpolateGridCoords) {
+      final node = grid.getGridNode(pathGridCoord);
+      node.paint = Paint()
+        ..style = PaintingStyle.fill
+        ..color = Colors.blueGrey.withOpacity(0.5);
+    }
+
+    final creepPath = grid.getPathFromCoords(pathGridCoords);
 
     creepSpawner = CreepSpawner()
       ..firstSpawnDelay = 5.0

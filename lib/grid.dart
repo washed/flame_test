@@ -75,12 +75,16 @@ class GridComponent extends PositionComponent {
     return component.position;
   }
 
-  Vector2 getPositionFromCoords(GridCoord coord) {
+  GridNodeComponent getGridNode(GridCoord coord) {
     if (coord.x < nodesWidth && coord.y < nodesWidth) {
       final node = nodes[coord.x][coord.y];
-      return node.absoluteCenter;
+      return node;
     }
     throw IndexError;
+  }
+
+  Vector2 getPositionFromCoords(GridCoord coord) {
+    return getGridNode(coord).absoluteCenter;
   }
 
   Path getPathFromCoords(List<GridCoord> coords) {
@@ -93,5 +97,41 @@ class GridComponent extends PositionComponent {
       );
     }
     return path;
+  }
+
+  List<GridCoord> interpolateGridCoords(List<GridCoord> coords) {
+    GridCoord? lastCoord;
+    List<GridCoord> interpolatedCoords = [];
+    for (final coord in coords) {
+      lastCoord ??= coord;
+
+      final xDelta = coord.x - lastCoord.x;
+      final yDelta = coord.y - lastCoord.y;
+
+      if (xDelta != 0 && yDelta != 0) {
+        // Probably use custom exception here
+        throw Error;
+      }
+
+      if (xDelta != 0) {
+        for (int x = lastCoord.x; x != lastCoord.x + xDelta; x += xDelta.sign) {
+          final coord = GridCoord(x, lastCoord.y);
+          interpolatedCoords.add(coord);
+        }
+      }
+
+      if (yDelta != 0) {
+        for (int y = lastCoord.y; y != lastCoord.y + yDelta; y += yDelta.sign) {
+          final coord = GridCoord(lastCoord.x, y);
+          interpolatedCoords.add(coord);
+        }
+      }
+
+      lastCoord = coord;
+    }
+
+    interpolatedCoords.add(coords.last);
+
+    return interpolatedCoords;
   }
 }
