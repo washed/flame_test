@@ -15,6 +15,8 @@ import 'package:flame_test/tower.dart';
 class Creep extends SpriteComponent
     with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
   static const int maxHealth = 1000;
+  static const double moveSpeed = 250;
+
   final int baseDamage = 100;
   int health = maxHealth;
   late Healthbar healthbar;
@@ -48,13 +50,13 @@ class Creep extends SpriteComponent
   void update(double dt) {
     super.update(dt);
 
-    if (startMovingDelay > 0.0) {
+    if (isMounted && startMovingDelay > 0.0) {
       startMovingDelay -= dt;
       if (startMovingDelay <= 0.0) {
         startMovingDelay = 0.0;
         final moveEffect = MoveAlongPathEffect(
           path,
-          EffectController(speed: 500),
+          EffectController(speed: moveSpeed),
           absolute: false,
         );
         add(moveEffect);

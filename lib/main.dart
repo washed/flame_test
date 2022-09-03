@@ -11,6 +11,7 @@ import 'package:flame/game.dart';
 import 'package:flame_test/add_tower/add_tower.dart';
 import 'package:flame_test/base.dart';
 import 'package:flame_test/creep.dart';
+import 'package:flame_test/creep_spawner.dart';
 import 'package:flame_test/grid.dart';
 
 class SpaceShooterGame extends FlameGame
@@ -54,12 +55,13 @@ class SpaceShooterGame extends FlameGame
       GridCoord(9, 9),
     ]);
 
-    final creep1 = Creep()
-      ..position = grid.getPositionFromCoords(GridCoord(0, 0))
-      ..path = creepPath
-      ..startMovingDelay = 2.0;
+    final creepSpawner = CreepSpawner()
+      ..creepCount = 10
+      ..creepPath = creepPath
+      ..gridPosition = GridCoord(0, 0)
+      ..spawnPeriod = 0.5;
 
-    await add(creep1);
+    add(creepSpawner);
   }
 }
 
