@@ -88,6 +88,8 @@ class GridComponent extends PositionComponent {
   }
 
   Path getPathFromCoords(List<GridCoord> coords) {
+    assert(coordsValid(coords));
+
     final path = Path();
     for (final coord in coords) {
       final nodeAbsoluteCenter = getPositionFromCoords(coord);
@@ -99,9 +101,8 @@ class GridComponent extends PositionComponent {
     return path;
   }
 
-  List<GridCoord> interpolateGridCoords(List<GridCoord> coords) {
+  bool coordsValid(List<GridCoord> coords) {
     GridCoord? lastCoord;
-    List<GridCoord> interpolatedCoords = [];
     for (final coord in coords) {
       lastCoord ??= coord;
 
@@ -109,9 +110,24 @@ class GridComponent extends PositionComponent {
       final yDelta = coord.y - lastCoord.y;
 
       if (xDelta != 0 && yDelta != 0) {
-        // Probably use custom exception here
-        throw Error;
+        return false;
       }
+
+      lastCoord = coord;
+    }
+    return true;
+  }
+
+  List<GridCoord> interpolateGridCoords(List<GridCoord> coords) {
+    assert(coordsValid(coords));
+
+    GridCoord? lastCoord;
+    List<GridCoord> interpolatedCoords = [];
+    for (final coord in coords) {
+      lastCoord ??= coord;
+
+      final xDelta = coord.x - lastCoord.x;
+      final yDelta = coord.y - lastCoord.y;
 
       if (xDelta != 0) {
         for (int x = lastCoord.x; x != lastCoord.x + xDelta; x += xDelta.sign) {
