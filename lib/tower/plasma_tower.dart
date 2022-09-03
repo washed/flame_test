@@ -6,7 +6,7 @@ class PlasmaTower extends Tower {
       : super(
           fireRate: 10.0,
           turnRate: 10.0,
-          firingRange: 200,
-          acquisitionRange: 250,
+          firingRange: 75,
+          acquisitionRange: 100,
         );
 }
