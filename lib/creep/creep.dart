@@ -10,22 +10,29 @@ import 'package:flame/effects.dart';
 import 'package:flame_test/base.dart';
 import 'package:flame_test/healthbar.dart';
 import 'package:flame_test/main.dart';
-import 'package:flame_test/tower.dart';
+import 'package:flame_test/tower/tower.dart';
 
 class Creep extends SpriteComponent
     with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
-  static const int maxHealth = 100;
-  static const double moveSpeed = 250;
+  final int maxHealth;
+  final double moveSpeed;
+  final int baseDamage;
 
-  final int baseDamage = 100;
-  int health = maxHealth;
-  late Healthbar healthbar;
   late Path path;
   late double startMovingDelay;
+
+  late int _health;
+  late Healthbar _healthbar;
 
   bool _targettable = true;
 
   bool get targettable => _targettable;
+
+  Creep({
+    required this.maxHealth,
+    required this.moveSpeed,
+    required this.baseDamage,
+  });
 
   @override
   Future<void> onLoad() async {
@@ -37,13 +44,14 @@ class Creep extends SpriteComponent
     height = 50;
     anchor = Anchor.center;
 
-    healthbar = Healthbar()
+    _health = maxHealth;
+    _healthbar = Healthbar()
       ..size = Vector2(40, 6)
       ..position = Vector2(width / 2, 0)
       ..anchor = Anchor.center;
 
     add(RectangleHitbox());
-    add(healthbar);
+    add(_healthbar);
   }
 
   @override
@@ -65,12 +73,12 @@ class Creep extends SpriteComponent
   }
 
   void getHit(int damage) {
-    health -= damage;
-    health = health.clamp(0, double.infinity).toInt();
+    _health -= damage;
+    _health = _health.clamp(0, double.infinity).toInt();
 
-    healthbar.health = health / maxHealth;
+    _healthbar.health = _health / maxHealth;
 
-    if (health == 0) {
+    if (_health == 0) {
       debugPrint("I'm dead!");
       _targettable = false;
       add(RemoveEffect());

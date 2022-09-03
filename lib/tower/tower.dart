@@ -18,13 +18,14 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   static const double angleDeadzone = 0.025;
 
   final TargetAcquisition targetAcquisition;
-
-  late double fireRate;
-  late double turnRate = 1.0; // rad/s
+  final double fireRate; // 1/s
+  final double turnRate; // rad/s
 
   bool placed = false;
 
   Tower({
+    required this.fireRate,
+    required this.turnRate,
     required double firingRange,
     required double acquisitionRange,
   }) : targetAcquisition = TargetAcquisition(

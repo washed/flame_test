@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flame/components.dart';
 
 // Project imports:
-import 'package:flame_test/creep.dart';
+import 'package:flame_test/creep/ant_creep.dart';
+import 'package:flame_test/creep/creep.dart';
 import 'package:flame_test/grid.dart';
 import 'package:flame_test/main.dart';
 
@@ -44,7 +45,7 @@ class CreepSpawner extends CircleComponent with HasGameRef<SpaceShooterGame> {
         if (_tMinusSpawn <= 0.0) {
           _tMinusSpawn = spawnPeriod;
           if (_creepSpawnCount < creepCount) {
-            final creep = Creep()
+            final creep = AntCreep()
               ..position = position
               ..path = creepPath
               ..startMovingDelay = 0.1;

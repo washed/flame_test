@@ -6,7 +6,8 @@ import 'package:flame/experimental.dart';
 // Project imports:
 import 'package:flame_test/add_tower/text_button.dart';
 import 'package:flame_test/main.dart';
-import 'package:flame_test/tower.dart';
+import 'package:flame_test/tower/plasma_tower.dart';
+import 'package:flame_test/tower/tower.dart';
 
 class DragShadow extends CircleComponent
     with HasGameRef<SpaceShooterGame>, DragCallbacks {
@@ -61,13 +62,7 @@ class AddTowerComponent extends PositionComponent
 
   Future<void> onAddTower() async {
     if (!placeTowerButton.isMounted && !abortPlaceTowerButton.isMounted) {
-      newTower = Tower(
-        firingRange: 200,
-        acquisitionRange: 250,
-      )
-        ..position = Vector2(200, 200)
-        ..fireRate = 10.0
-        ..turnRate = 10.0;
+      newTower = PlasmaTower()..position = Vector2(50, 50);
 
       dragShadow = DragShadow(tower: newTower!);
 

@@ -1,16 +1,16 @@
 // Flutter imports:
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
 // Project imports:
-import 'package:flame_test/creep.dart';
+import 'package:flame_test/creep/creep.dart';
 import 'package:flame_test/healthbar.dart';
 
 class Base extends CircleComponent with CollisionCallbacks {
-  static const int maxHealth = 1000;
+  static const int maxHealth = 100;
   int health = maxHealth;
   late Healthbar healthbar;
 
@@ -20,6 +20,9 @@ class Base extends CircleComponent with CollisionCallbacks {
 
     radius = 10;
     anchor = Anchor.center;
+    paint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Colors.green;
 
     healthbar = Healthbar()
       ..size = Vector2(40, 6)
