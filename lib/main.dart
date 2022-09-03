@@ -65,6 +65,7 @@ class SpaceShooterGame extends FlameGame
       node.paint = Paint()
         ..style = PaintingStyle.fill
         ..color = Colors.blueGrey.withOpacity(0.5);
+      node.buildable = false;
     }
 
     final creepPath = grid.getPathFromCoords(pathGridCoords);

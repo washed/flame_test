@@ -15,6 +15,7 @@ class GridCoord {
 
 class GridNodeComponent extends RectangleComponent {
   GridCoord coords;
+  bool buildable = true;
 
   GridNodeComponent({
     required this.coords,
@@ -67,7 +68,8 @@ class GridComponent extends PositionComponent {
         0 <= vIndex &&
         vIndex < nodesHeight) {
       final node = nodes[hIndex][vIndex];
-      if ((node.center - relativePosition).length < snapFactor * edgeSize) {
+      if ((node.center - relativePosition).length < snapFactor * edgeSize &&
+          node.buildable) {
         return node.absoluteCenter;
       }
     }
