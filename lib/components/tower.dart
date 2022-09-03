@@ -10,9 +10,9 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
 // Project imports:
-import 'package:flame_test/creep/creep.dart';
+import 'package:flame_test/components/creep/creep.dart';
 import 'package:flame_test/main.dart';
-import 'package:flame_test/move_extension.dart';
+import 'package:flame_test/util/move_extension.dart';
 
 class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   static const double angleDeadzone = 0.025;

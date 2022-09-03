@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flame/components.dart';
 
 // Project imports:
-import 'package:flame_test/creep/ant_creep.dart';
-import 'package:flame_test/creep/creep.dart';
-import 'package:flame_test/grid.dart';
+import 'package:flame_test/components/creep/creep.dart';
+import 'package:flame_test/components/grid/grid_coord.dart';
+import 'package:flame_test/creeps/ant_creep.dart';
 import 'package:flame_test/main.dart';
 
 class CreepSpawner extends CircleComponent with HasGameRef<SpaceShooterGame> {
@@ -32,6 +32,10 @@ class CreepSpawner extends CircleComponent with HasGameRef<SpaceShooterGame> {
   });
 
   bool get allCreepsSpawned => _creepSpawnCount == creepCount;
+
+  bool get allCreepsKilled => allCreepsSpawned
+      ? _creepsSpawned.every((element) => element.dead)
+      : false;
 
   @override
   Future<void> onLoad() async {

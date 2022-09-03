@@ -1,5 +1,7 @@
 // Project imports:
-import 'package:flame_test/creep/creep.dart';
+
+// Project imports:
+import 'package:flame_test/components/creep/creep.dart';
 
 class AntCreep extends Creep {
   AntCreep()

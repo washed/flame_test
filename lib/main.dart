@@ -8,11 +8,11 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
 // Project imports:
-import 'package:flame_test/add_tower/add_tower.dart';
-import 'package:flame_test/creep/creep.dart';
-import 'package:flame_test/grid.dart';
-import 'package:flame_test/level_ui.dart';
-import 'package:flame_test/levels/level.dart';
+import 'package:flame_test/components/creep/creep.dart';
+import 'package:flame_test/components/grid/grid.dart';
+import 'package:flame_test/components/level/level.dart';
+import 'package:flame_test/components/level/level_ui.dart';
+import 'package:flame_test/components/tower_builder/add_tower.dart';
 import 'package:flame_test/levels/level_1.dart';
 
 class SpaceShooterGame extends FlameGame
@@ -22,7 +22,7 @@ class SpaceShooterGame extends FlameGame
         HasDraggableComponents,
         HasTappables {
   late GridComponent grid;
-  late Level currentLevel;
+  Level? currentLevel;
 
   @override
   Future<void> onLoad() async {
@@ -50,6 +50,16 @@ class SpaceShooterGame extends FlameGame
 
     currentLevel = level_1;
     add(level_1);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    if (currentLevel?.levelFinished == true) {
+      currentLevel = null;
+      // TODO: this should go into some level/global state management
+    }
   }
 }
 

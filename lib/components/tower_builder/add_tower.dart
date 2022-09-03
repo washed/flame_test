@@ -4,10 +4,10 @@ import 'package:flame/effects.dart';
 import 'package:flame/experimental.dart';
 
 // Project imports:
-import 'package:flame_test/add_tower/text_button.dart';
+import 'package:flame_test/components/text_button.dart';
+import 'package:flame_test/components/tower.dart';
 import 'package:flame_test/main.dart';
-import 'package:flame_test/tower/plasma_tower.dart';
-import 'package:flame_test/tower/tower.dart';
+import 'package:flame_test/towers/plasma_tower.dart';
 
 class DragShadow extends CircleComponent
     with HasGameRef<SpaceShooterGame>, DragCallbacks {

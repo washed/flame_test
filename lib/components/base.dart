@@ -6,8 +6,8 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
 // Project imports:
-import 'package:flame_test/creep/creep.dart';
-import 'package:flame_test/healthbar.dart';
+import 'package:flame_test/components/creep/creep.dart';
+import 'package:flame_test/components/healthbar.dart';
 
 class Base extends CircleComponent with CollisionCallbacks {
   static const int maxHealth = 100;

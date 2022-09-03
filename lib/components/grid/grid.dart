@@ -4,33 +4,9 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flame/components.dart';
 
-class GridCoord {
-  final int x;
-  final int y;
-
-  GridCoord(this.x, this.y)
-      : assert(x >= 0),
-        assert(y >= 0);
-}
-
-class GridNodeComponent extends RectangleComponent {
-  GridCoord coords;
-  bool buildable = true;
-
-  GridNodeComponent({
-    required this.coords,
-    required double edgeSize,
-  }) : super(
-          size: Vector2(edgeSize, edgeSize),
-          paint: Paint()
-            ..style = PaintingStyle.stroke
-            ..color = Colors.grey,
-          position: Vector2(
-            coords.x * edgeSize,
-            coords.y * edgeSize,
-          ),
-        );
-}
+// Project imports:
+import 'package:flame_test/components/grid/grid_coord.dart';
+import 'package:flame_test/components/grid/grid_node.dart';
 
 class GridComponent extends PositionComponent {
   late int nodesWidth;

@@ -7,10 +7,10 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
 // Project imports:
-import 'package:flame_test/base.dart';
-import 'package:flame_test/healthbar.dart';
+import 'package:flame_test/components/base.dart';
+import 'package:flame_test/components/healthbar.dart';
+import 'package:flame_test/components/tower.dart';
 import 'package:flame_test/main.dart';
-import 'package:flame_test/tower/tower.dart';
 
 class Creep extends SpriteComponent
     with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
@@ -53,6 +53,8 @@ class Creep extends SpriteComponent
     add(RectangleHitbox());
     add(_healthbar);
   }
+
+  bool get dead => _health <= 0;
 
   @override
   void update(double dt) {
