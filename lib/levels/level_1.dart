@@ -1,6 +1,4 @@
 // Project imports:
-
-// Project imports:
 import 'package:flame_test/components/creep_spawner.dart';
 import 'package:flame_test/components/grid/grid_coord.dart';
 import 'package:flame_test/components/level/level.dart';
