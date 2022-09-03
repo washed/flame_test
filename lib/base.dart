@@ -34,7 +34,7 @@ class Base extends CircleComponent with CollisionCallbacks {
     debugPrint("Got hit by a creep!");
 
     health -= creep.baseDamage;
-    health.clamp(0, double.infinity);
+    health = health = health.clamp(0, double.infinity).toInt();
 
     healthbar.health = health / maxHealth;
 

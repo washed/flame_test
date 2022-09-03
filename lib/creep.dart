@@ -64,7 +64,7 @@ class Creep extends SpriteComponent
 
   void getHit(int damage) {
     health -= damage;
-    health.clamp(0, double.infinity);
+    health = health.clamp(0, double.infinity).toInt();
 
     healthbar.health = health / maxHealth;
 
