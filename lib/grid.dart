@@ -59,6 +59,11 @@ class GridComponent extends PositionComponent {
   }
 
   Vector2 getSnapPosition(PositionComponent component) {
+    final node = snappedAtNode(component);
+    return node?.absoluteCenter ?? component.position;
+  }
+
+  GridNodeComponent? snappedAtNode(PositionComponent component) {
     final relativePosition = component.absolutePosition - absolutePosition;
     final int hIndex = relativePosition.x ~/ edgeSize;
     final int vIndex = relativePosition.y ~/ edgeSize;
@@ -70,11 +75,10 @@ class GridComponent extends PositionComponent {
       final node = nodes[hIndex][vIndex];
       if ((node.center - relativePosition).length < snapFactor * edgeSize &&
           node.buildable) {
-        return node.absoluteCenter;
+        return node;
       }
     }
-
-    return component.position;
+    return null;
   }
 
   GridNodeComponent getGridNode(GridCoord coord) {

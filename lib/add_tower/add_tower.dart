@@ -49,6 +49,15 @@ class AddTowerComponent extends PositionComponent
   Tower? newTower;
   DragShadow? dragShadow;
 
+  bool get placeable {
+    if (newTower != null) {
+      final node = gameRef.grid.snappedAtNode(newTower!);
+      return node?.buildable ?? false;
+    }
+
+    return false;
+  }
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -78,7 +87,8 @@ class AddTowerComponent extends PositionComponent
     if (newTower != null &&
         dragShadow != null &&
         placeTowerButton.isMounted &&
-        abortPlaceTowerButton.isMounted) {
+        abortPlaceTowerButton.isMounted &&
+        placeable) {
       newTower!.placed = true;
       newTower!.targetAcquisition.renderRanges = false;
       newTower = null;
