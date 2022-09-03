@@ -9,6 +9,7 @@ import 'package:flame/game.dart';
 
 // Project imports:
 import 'package:flame_test/add_tower/add_tower.dart';
+import 'package:flame_test/base.dart';
 import 'package:flame_test/creep.dart';
 import 'package:flame_test/grid.dart';
 
@@ -39,6 +40,9 @@ class SpaceShooterGame extends FlameGame
 
     final addTowerComponent = AddTowerComponent();
     add(addTowerComponent);
+
+    final base = Base()..position = grid.getPositionFromCoords(GridCoord(9, 9));
+    await add(base);
 
     final creepPath = grid.getPathFromCoords([
       GridCoord(0, 0),
