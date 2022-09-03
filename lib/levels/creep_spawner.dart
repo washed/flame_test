@@ -11,15 +11,27 @@ import 'package:flame_test/grid.dart';
 import 'package:flame_test/main.dart';
 
 class CreepSpawner extends CircleComponent with HasGameRef<SpaceShooterGame> {
-  late int creepCount;
-  late double spawnPeriod;
-  late double firstSpawnDelay = 0.0;
+  final GridCoord gridPosition;
+  final int creepCount;
+  final List<GridCoord> creepPathCoords;
+  final double spawnPeriod;
+  double firstSpawnDelay;
+
   late Path creepPath;
-  late GridCoord gridPosition;
 
   double _tMinusSpawn = 0.0;
   int _creepSpawnCount = 0;
   final List<Creep> _creepsSpawned = [];
+
+  CreepSpawner({
+    required this.gridPosition,
+    required this.creepCount,
+    required this.creepPathCoords,
+    required this.spawnPeriod,
+    this.firstSpawnDelay = 0.0,
+  });
+
+  bool get allCreepsSpawned => _creepSpawnCount == creepCount;
 
   @override
   Future<void> onLoad() async {
@@ -31,6 +43,8 @@ class CreepSpawner extends CircleComponent with HasGameRef<SpaceShooterGame> {
     paint = Paint()
       ..style = PaintingStyle.fill
       ..color = Colors.red;
+
+    creepPath = gameRef.grid.getPathFromCoords(creepPathCoords);
   }
 
   @override

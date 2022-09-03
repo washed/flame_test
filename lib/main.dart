@@ -9,10 +9,11 @@ import 'package:flame/game.dart';
 
 // Project imports:
 import 'package:flame_test/add_tower/add_tower.dart';
-import 'package:flame_test/base.dart';
 import 'package:flame_test/creep/creep.dart';
-import 'package:flame_test/creep_spawner.dart';
 import 'package:flame_test/grid.dart';
+import 'package:flame_test/level_ui.dart';
+import 'package:flame_test/levels/level.dart';
+import 'package:flame_test/levels/level_1.dart';
 
 class SpaceShooterGame extends FlameGame
     with
@@ -21,8 +22,7 @@ class SpaceShooterGame extends FlameGame
         HasDraggableComponents,
         HasTappables {
   late GridComponent grid;
-  late Base base;
-  late CreepSpawner creepSpawner;
+  late Level currentLevel;
 
   @override
   Future<void> onLoad() async {
@@ -45,39 +45,11 @@ class SpaceShooterGame extends FlameGame
     final addTowerComponent = AddTowerComponent();
     add(addTowerComponent);
 
-    base = Base()..position = grid.getPositionFromCoords(GridCoord(9, 9));
-    add(base);
+    final levelUI = LevelUI();
+    add(levelUI);
 
-    final pathGridCoords = [
-      GridCoord(0, 0),
-      GridCoord(5, 0),
-      GridCoord(5, 3),
-      GridCoord(2, 3),
-      GridCoord(2, 6),
-      GridCoord(9, 6),
-      GridCoord(9, 9),
-    ];
-
-    final interpolateGridCoords = grid.interpolateGridCoords(pathGridCoords);
-
-    for (final pathGridCoord in interpolateGridCoords) {
-      final node = grid.getGridNode(pathGridCoord);
-      node.paint = Paint()
-        ..style = PaintingStyle.fill
-        ..color = Colors.blueGrey.withOpacity(0.5);
-      node.buildable = false;
-    }
-
-    final creepPath = grid.getPathFromCoords(pathGridCoords);
-
-    creepSpawner = CreepSpawner()
-      ..firstSpawnDelay = 5.0
-      ..creepCount = 10
-      ..creepPath = creepPath
-      ..gridPosition = GridCoord(0, 0)
-      ..spawnPeriod = 0.5;
-
-    add(creepSpawner);
+    currentLevel = level_1;
+    add(level_1);
   }
 }
 
