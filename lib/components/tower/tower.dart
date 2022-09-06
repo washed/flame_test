@@ -1,5 +1,6 @@
 // Package imports:
 import 'package:flame/components.dart';
+import 'package:flame_test/components/statusbar/charge_bar.dart';
 
 // Project imports:
 import 'package:flame_test/components/tower/bullet.dart';
@@ -10,14 +11,27 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   static const double angleDeadzone = 0.025;
 
   final TargetAcquisition targetAcquisition;
-  final double fireRate; // 1/s
+  // final double fireRate; // 1/s
   final double turnRate; // rad/s
+  final double baseConsumption;
+  final double chargeConsumption;
+  final double chargeEnergy;
+
+  late ChargeBar _chargeBar;
+
+  double _chargedEnergy = 0.0;
 
   bool placed = false;
+  bool _powered = false;
+
+  bool get powered => _powered;
 
   Tower({
-    required this.fireRate,
+    //required this.fireRate,
     required this.turnRate,
+    required this.baseConsumption,
+    required this.chargeConsumption,
+    required this.chargeEnergy,
     required double firingRange,
     required double acquisitionRange,
   }) : targetAcquisition = TargetAcquisition(
@@ -25,6 +39,21 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
           firingRange: firingRange,
           angleDeadzone: angleDeadzone,
         )..anchor = Anchor.center;
+
+  set chargedEnergy(double chargedEnergy) {
+    _chargedEnergy = chargedEnergy;
+    _chargeBar.value = _chargedEnergy / chargeEnergy;
+  }
+
+  double get chargedEnergy => _chargedEnergy;
+
+  double assignEnergy(double assignedEnergy) {
+    final leftOverEnergy = (assignedEnergy + chargedEnergy - chargeEnergy)
+        .clamp(0, double.infinity)
+        .toDouble();
+    chargedEnergy = (chargedEnergy + assignedEnergy).clamp(0.0, chargeEnergy);
+    return leftOverEnergy;
+  }
 
   @override
   Future<void> onLoad() async {
@@ -39,6 +68,13 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
     targetAcquisition.position = Vector2(width / 2, height / 2);
 
     add(targetAcquisition);
+
+    _chargeBar = ChargeBar()
+      ..value = 0.0
+      ..size = Vector2(40, 6)
+      ..position = Vector2(width / 2, 0)
+      ..anchor = Anchor.center;
+    add(_chargeBar);
   }
 
   void turnToTarget(double dt) {
@@ -61,21 +97,22 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
     super.update(dt);
 
     if (placed) {
+      _powered = gameRef.energy.addConsumer(this);
+    }
+
+    if (placed && powered) {
       turnToTarget(dt);
       maybeShoot(dt);
     }
   }
 
-  double lastShotDt = 0.0;
-
   void maybeShoot(double dt) {
-    if (lastShotDt > 0) {
-      lastShotDt -= dt;
-    } else if (targetAcquisition.closestAcquiredTargetHasFiringSolution) {
+    if (targetAcquisition.closestAcquiredTargetHasFiringSolution &&
+        chargedEnergy >= chargeEnergy) {
+      chargedEnergy = chargedEnergy - chargeEnergy;
       parent?.add(Bullet(target: targetAcquisition.closestAcquiredTarget!)
         ..position = position
         ..angle = angle);
-      lastShotDt = 1 / fireRate;
     }
   }
 }

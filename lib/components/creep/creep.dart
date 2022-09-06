@@ -8,7 +8,7 @@ import 'package:flame/effects.dart';
 
 // Project imports:
 import 'package:flame_test/components/base.dart';
-import 'package:flame_test/components/healthbar.dart';
+import 'package:flame_test/components/statusbar/health_bar.dart';
 import 'package:flame_test/components/tower/bullet.dart';
 import 'package:flame_test/main.dart';
 
@@ -78,7 +78,7 @@ class Creep extends SpriteComponent
     _health -= damage;
     _health = _health.clamp(0, double.infinity).toInt();
 
-    _healthbar.health = _health / maxHealth;
+    _healthbar.value = _health / maxHealth;
 
     if (_health == 0) {
       debugPrint("I'm dead!");

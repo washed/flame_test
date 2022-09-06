@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'package:flame_test/components/energy/energy.dart';
+import 'package:flame_test/components/energy/energy_ui.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -21,6 +23,8 @@ class SpaceShooterGame extends FlameGame
         HasCollisionDetection,
         HasDraggableComponents,
         HasTappables {
+  final energy = Energy();
+
   late GridComponent grid;
   Level? currentLevel;
 
@@ -44,6 +48,10 @@ class SpaceShooterGame extends FlameGame
 
     final addTowerComponent = AddTowerComponent();
     add(addTowerComponent);
+
+    add(energy);
+    final energyUI = EnergyUI();
+    add(energyUI);
 
     final levelUI = LevelUI();
     add(levelUI);

@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flame/components.dart';
 
-class Healthbar extends PositionComponent {
-  double health = 1.0;
+class StatusBar extends PositionComponent {
+  double _value = 1.0;
+  final Color statusBarColor;
 
-  late RectangleComponent healthRect;
+  late RectangleComponent statusRect;
+
+  StatusBar({required this.statusBarColor});
 
   // TODO: make this not affected by turning the parent or similar
 
@@ -21,23 +24,29 @@ class Healthbar extends PositionComponent {
       anchor: Anchor.centerLeft,
     );
 
-    healthRect = RectangleComponent(
+    statusRect = RectangleComponent(
       size: Vector2(size.x - 2, size.y - 2),
       position: Vector2(1, 1),
       paint: Paint()
-        ..color = Colors.green
+        ..color = statusBarColor
         ..style = PaintingStyle.fill,
       anchor: Anchor.centerLeft,
     );
 
     add(frameRect);
-    add(healthRect);
+    add(statusRect);
   }
+
+  set value(double value) {
+    _value = value.clamp(0.0, 1.0);
+  }
+
+  double get value => _value;
 
   @override
   void update(double dt) {
     super.update(dt);
 
-    healthRect.scale = Vector2(health, 1.0);
+    statusRect.scale = Vector2(value, 1.0);
   }
 }

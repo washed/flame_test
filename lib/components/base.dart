@@ -7,7 +7,7 @@ import 'package:flame/components.dart';
 
 // Project imports:
 import 'package:flame_test/components/creep/creep.dart';
-import 'package:flame_test/components/healthbar.dart';
+import 'package:flame_test/components/statusbar/health_bar.dart';
 
 class Base extends CircleComponent with CollisionCallbacks {
   static const int maxHealth = 100;
@@ -39,7 +39,7 @@ class Base extends CircleComponent with CollisionCallbacks {
     health -= creep.baseDamage;
     health = health = health.clamp(0, double.infinity).toInt();
 
-    healthbar.health = health / maxHealth;
+    healthbar.value = health / maxHealth;
 
     if (health == 0) {
       debugPrint("Game over!");
