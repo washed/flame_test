@@ -10,12 +10,12 @@ import 'package:flame/effects.dart';
 
 // Project imports:
 import 'package:flame_test/components/creep/creep.dart';
-import 'package:flame_test/components/tower/tower.dart';
 import 'package:flame_test/main.dart';
 
 class TargetAcquisition extends PositionComponent
     with HasGameRef<SpaceShooterGame> {
   final double acquisitionRange;
+  final double bulletVelocity;
   final double firingRange;
   final double angleDeadzone;
 
@@ -27,6 +27,7 @@ class TargetAcquisition extends PositionComponent
 
   TargetAcquisition({
     required this.acquisitionRange,
+    required this.bulletVelocity,
     required this.firingRange,
     required this.angleDeadzone,
   }) : assert(acquisitionRange >= firingRange);
@@ -73,9 +74,48 @@ class TargetAcquisition extends PositionComponent
         .compareTo((b.absolutePosition - absolutePosition).length));
 
     orderedAcquiredTargets = acquiredTargets;
+
+    // for (final orderedAcquiredTarget in orderedAcquiredTargets){}
   }
 
-  PositionComponent? get closestAcquiredTarget =>
+  double getLeadAngleError(Creep target) {
+    final deltaPosition = target.absolutePosition - absolutePosition;
+
+    final targetHeading = Vector2(
+      sin(target.absoluteAngle),
+      -cos(target.absoluteAngle),
+    );
+
+    final losToTargetHeadingAngle = deltaPosition.angleToSigned(targetHeading);
+
+    // double leadTargetDistance = 0.0;
+    double angleToLeadTarget = 0.0;
+    if (losToTargetHeadingAngle >= 0.0 && losToTargetHeadingAngle < pi / 2) {
+      angleToLeadTarget = atan2(target.moveSpeed, bulletVelocity);
+
+      // leadTargetDistance = sin(angleToLeadTarget) * deltaPosition.length;
+    } else if (losToTargetHeadingAngle >= pi / 2 &&
+        losToTargetHeadingAngle < pi) {
+      // TODO: not sure about these radians conversion
+      angleToLeadTarget = sin(target.moveSpeed / bulletVelocity * 2 * pi);
+
+      // leadTargetDistance = tan(angleToLeadTarget) * deltaPosition.length;
+    } else if (losToTargetHeadingAngle < 0.0 &&
+        losToTargetHeadingAngle >= -pi / 2) {
+      angleToLeadTarget = -sin(target.moveSpeed / bulletVelocity * 2 * pi);
+      // ?
+    } else if (losToTargetHeadingAngle < -pi / 2 &&
+        losToTargetHeadingAngle >= -pi) {
+      angleToLeadTarget = -atan2(target.moveSpeed, bulletVelocity);
+      // ?
+    }
+
+    // target.leadTarget.position =
+    //     Vector2(height / 2, width / 2 + leadTargetDistance);
+    return angleToLeadTarget;
+  }
+
+  Creep? get closestAcquiredTarget =>
       orderedAcquiredTargets.isNotEmpty ? orderedAcquiredTargets.first : null;
 
   bool get closestAcquiredTargetInFiringRange => (closestAcquiredTarget != null)
@@ -101,7 +141,10 @@ class TargetAcquisition extends PositionComponent
         -cos(absoluteAngle),
       );
 
-      return deltaPosition.angleToSigned(myVector);
+      final leadAngleError = getLeadAngleError(closestAcquiredTarget!);
+      debugPrint("leadAngleError: $leadAngleError");
+
+      return deltaPosition.angleToSigned(myVector) - leadAngleError;
     }
     return null;
   }

@@ -12,6 +12,7 @@ class Tower extends PositionComponent with HasGameRef<SpaceShooterGame> {
 
   final TargetAcquisition targetAcquisition;
   final double turnRate; // rad/s
+  final double bulletVelocity;
   final double baseConsumption;
   final double chargeConsumption;
   final double chargeEnergy;
@@ -28,6 +29,7 @@ class Tower extends PositionComponent with HasGameRef<SpaceShooterGame> {
 
   Tower({
     required this.turnRate,
+    required this.bulletVelocity,
     required this.baseConsumption,
     required this.chargeConsumption,
     required this.chargeEnergy,
@@ -35,6 +37,7 @@ class Tower extends PositionComponent with HasGameRef<SpaceShooterGame> {
     required double acquisitionRange,
   }) : targetAcquisition = TargetAcquisition(
           acquisitionRange: acquisitionRange,
+          bulletVelocity: bulletVelocity,
           firingRange: firingRange,
           angleDeadzone: angleDeadzone,
         )..anchor = Anchor.center;
@@ -116,7 +119,10 @@ class Tower extends PositionComponent with HasGameRef<SpaceShooterGame> {
     if (targetAcquisition.closestAcquiredTargetHasFiringSolution &&
         chargedEnergy >= chargeEnergy) {
       chargedEnergy = chargedEnergy - chargeEnergy;
-      parent?.add(Bullet(target: targetAcquisition.closestAcquiredTarget!)
+      parent?.add(Bullet(
+        velocity: bulletVelocity,
+        target: targetAcquisition.closestAcquiredTarget!,
+      )
         ..position = position
         ..angle = towerSprite.angle);
     }

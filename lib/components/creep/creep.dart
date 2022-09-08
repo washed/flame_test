@@ -23,6 +23,7 @@ class Creep extends PositionComponent
 
   late SpriteComponent creepSprite;
   late RectangleHitbox hitbox;
+  late PositionComponent leadTarget;
 
   late Path path;
   late double startMovingDelay;
@@ -68,6 +69,19 @@ class Creep extends PositionComponent
 
     add(hitbox);
 
+    /*
+    leadTarget = RectangleComponent(
+      size: Vector2(1, 50),
+      anchor: Anchor.center,
+      paint: Paint()
+        ..color = Colors.redAccent
+        ..style = PaintingStyle.fill,
+    )
+      ..renderShape = true
+      ..position = Vector2(0, 0);
+    add(leadTarget);
+    */
+
     _healthbar = Healthbar()
       ..size = Vector2(30, 3)
       ..position = Vector2(width / 2, 5)
@@ -86,6 +100,7 @@ class Creep extends PositionComponent
   set angle(double value) {
     creepSprite.angle = value;
     hitbox.angle = value;
+    // leadTarget.angle = value;
   }
 
   @override

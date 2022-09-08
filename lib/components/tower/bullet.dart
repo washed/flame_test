@@ -19,7 +19,7 @@ class Bullet extends CircleComponent
 
   Bullet({
     required this.target,
-    this.velocity = 50.0,
+    required this.velocity,
   });
 
   @override

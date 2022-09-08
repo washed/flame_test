@@ -21,14 +21,14 @@ final wave_1 = Wave(
       creepCount: 10,
       creepPathCoords: pathGridCoords,
       gridPosition: GridCoord(0, 0),
-      spawnPeriod: 0.25,
+      spawnPeriod: 1.0,
     ),
     CreepSpawner(
       firstSpawnDelay: 5.0,
       creepCount: 10,
       creepPathCoords: pathGridCoords,
       gridPosition: GridCoord(0, 0),
-      spawnPeriod: 0.5,
+      spawnPeriod: 2.0,
     )
   ],
 );
