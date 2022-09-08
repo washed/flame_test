@@ -26,14 +26,13 @@ class Bullet extends CircleComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    radius = 5;
+    radius = 2.5;
     anchor = Anchor.center;
-
     paint = Paint()
       ..color = Colors.purpleAccent
       ..style = PaintingStyle.fill;
 
-    final hitbox = RectangleHitbox();
+    final hitbox = CircleHitbox.relative(0.9, parentSize: size);
     add(hitbox);
 
     final moveEffect = MoveInDirectionEffect(
