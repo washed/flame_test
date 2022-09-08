@@ -45,7 +45,8 @@ class AddTowerComponent extends PositionComponent
 
   Future<void> onAddTower() async {
     if (!placeTowerButton.isMounted && !abortPlaceTowerButton.isMounted) {
-      newTower = PlasmaTower()..position = Vector2(50, 50);
+      final towerPosition = absolutePositionOf(Vector2(40, -40));
+      newTower = PlasmaTower()..position = towerPosition;
 
       dragShadow = DragShadow(tower: newTower!);
 

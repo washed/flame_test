@@ -10,7 +10,7 @@ import 'package:flame_test/main.dart';
 class LevelUI extends PositionComponent with HasGameRef<SpaceShooterGame> {
   final TextComponent waveText = TextComponent(
     text: "",
-    position: Vector2(20, 40),
+    position: Vector2(0, 0),
     anchor: Anchor.topLeft,
     textRenderer: TextPaint(
       style: const TextStyle(color: Colors.blue),
@@ -19,7 +19,7 @@ class LevelUI extends PositionComponent with HasGameRef<SpaceShooterGame> {
 
   final TextComponent waveCountdownText = TextComponent(
     text: "",
-    position: Vector2(100, 40),
+    position: Vector2(0, 20),
     anchor: Anchor.topLeft,
     textRenderer: TextPaint(
       style: const TextStyle(color: Colors.blue),

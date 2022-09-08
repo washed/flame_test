@@ -42,18 +42,18 @@ class SpaceShooterGame extends FlameGame
       ..edgeSize = 50
       ..nodesHeight = 10
       ..nodesWidth = 10
-      ..position = Vector2(0, 80);
+      ..position = Vector2(0, 120);
 
     add(grid);
 
-    final addTowerComponent = AddTowerComponent();
+    final addTowerComponent = AddTowerComponent()..position = Vector2(0, 800);
     add(addTowerComponent);
 
     add(energy);
-    final energyUI = EnergyUI();
+    final energyUI = EnergyUI()..position = Vector2(200, 0);
     add(energyUI);
 
-    final levelUI = LevelUI();
+    final levelUI = LevelUI()..position = Vector2(0, 0);
     add(levelUI);
 
     currentLevel = level_1;

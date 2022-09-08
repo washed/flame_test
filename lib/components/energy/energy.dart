@@ -33,7 +33,8 @@ class Energy extends Component {
 
   double get netChargePower => generation - totalChargeConsumption;
 
-  double get netPower => netChargePower + netBasePower;
+  double get netTotalPower =>
+      generation - totalBaseConsumption - totalChargeConsumption;
 
   void distributeEnergy(double dt) {
     double availableChargeEnergy = (generation - totalBaseConsumption) * dt;
