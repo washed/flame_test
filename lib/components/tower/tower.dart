@@ -11,7 +11,6 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   static const double angleDeadzone = 0.025;
 
   final TargetAcquisition targetAcquisition;
-  // final double fireRate; // 1/s
   final double turnRate; // rad/s
   final double baseConsumption;
   final double chargeConsumption;
@@ -27,7 +26,6 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   bool get powered => _powered;
 
   Tower({
-    //required this.fireRate,
     required this.turnRate,
     required this.baseConsumption,
     required this.chargeConsumption,
