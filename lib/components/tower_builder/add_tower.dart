@@ -15,10 +15,10 @@ class AddTowerComponent extends PositionComponent
       TextButtonComponent(text: "Add Tower")..position = Vector2(0, 0);
 
   final TextButtonComponent placeTowerButton =
-      TextButtonComponent(text: "Place Tower")..position = Vector2(90, 2);
+      TextButtonComponent(text: "Place Tower")..position = Vector2(90, 0);
 
   final TextButtonComponent abortPlaceTowerButton =
-      TextButtonComponent(text: "Abort")..position = Vector2(180, 2);
+      TextButtonComponent(text: "Abort")..position = Vector2(180, 0);
 
   Tower? newTower;
   DragShadow? dragShadow;
