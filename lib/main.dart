@@ -1,6 +1,4 @@
 // Flutter imports:
-import 'package:flame_test/components/energy/energy.dart';
-import 'package:flame_test/components/energy/energy_ui.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -11,6 +9,8 @@ import 'package:flame/game.dart';
 
 // Project imports:
 import 'package:flame_test/components/creep/creep.dart';
+import 'package:flame_test/components/energy/energy.dart';
+import 'package:flame_test/components/energy/energy_ui.dart';
 import 'package:flame_test/components/grid/grid.dart';
 import 'package:flame_test/components/level/level.dart';
 import 'package:flame_test/components/level/level_ui.dart';

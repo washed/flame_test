@@ -58,5 +58,5 @@ final level_1 = Level(
     wave_1,
     wave_2,
   ],
-  delayBetweenWaves: 10.0,
+  delayBetweenWaves: 1.0,
 );

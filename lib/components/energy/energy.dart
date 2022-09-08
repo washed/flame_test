@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:flame/components.dart';
+
+// Project imports:
 import 'package:flame_test/components/tower/tower.dart';
 
 class Energy extends Component {

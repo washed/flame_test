@@ -1,3 +1,6 @@
+// Dart imports:
+import 'dart:math';
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -12,11 +15,14 @@ import 'package:flame_test/components/statusbar/health_bar.dart';
 import 'package:flame_test/components/tower/bullet.dart';
 import 'package:flame_test/main.dart';
 
-class Creep extends SpriteComponent
+class Creep extends PositionComponent
     with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
   final int maxHealth;
   final double moveSpeed;
   final int baseDamage;
+
+  late SpriteComponent creepSprite;
+  late RectangleHitbox hitbox;
 
   late Path path;
   late double startMovingDelay;
@@ -38,16 +44,33 @@ class Creep extends SpriteComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await gameRef.loadSprite("player-sprite.png");
-
-    width = 25;
-    height = 50;
+    width = 30;
+    height = 30;
     anchor = Anchor.center;
-
     _health = maxHealth;
+
+    creepSprite = SpriteComponent()
+      ..sprite = await gameRef.loadSprite("player-sprite.png")
+      ..width = 10
+      ..height = 20
+      ..anchor = Anchor.center
+      ..position = Vector2(width / 2, height / 2)
+      ..angle = pi / 2;
+
+    add(creepSprite);
+
+    hitbox = RectangleHitbox()
+      ..width = 10
+      ..height = 20
+      ..anchor = Anchor.center
+      ..position = Vector2(width / 2, height / 2)
+      ..angle = pi / 2;
+
+    add(hitbox);
+
     _healthbar = Healthbar()
-      ..size = Vector2(40, 6)
-      ..position = Vector2(width / 2, 0)
+      ..size = Vector2(30, 3)
+      ..position = Vector2(width / 2, 5)
       ..anchor = Anchor.center;
 
     add(RectangleHitbox());
@@ -55,6 +78,15 @@ class Creep extends SpriteComponent
   }
 
   bool get dead => _health <= 0;
+
+  @override
+  double get angle => creepSprite.angle;
+
+  @override
+  set angle(double value) {
+    creepSprite.angle = value;
+    hitbox.angle = value;
+  }
 
   @override
   void update(double dt) {
@@ -68,6 +100,7 @@ class Creep extends SpriteComponent
           path,
           EffectController(speed: moveSpeed),
           absolute: false,
+          oriented: true,
         );
         add(moveEffect);
       }

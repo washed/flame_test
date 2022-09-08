@@ -1,8 +1,8 @@
 // Package imports:
 import 'package:flame/components.dart';
-import 'package:flame_test/components/statusbar/charge_bar.dart';
 
 // Project imports:
+import 'package:flame_test/components/statusbar/charge_bar.dart';
 import 'package:flame_test/components/tower/bullet.dart';
 import 'package:flame_test/components/tower/target_acquisition.dart';
 import 'package:flame_test/main.dart';
