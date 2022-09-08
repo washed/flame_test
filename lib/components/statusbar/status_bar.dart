@@ -12,8 +12,6 @@ class StatusBar extends PositionComponent {
 
   StatusBar({required this.statusBarColor});
 
-  // TODO: make this not affected by turning the parent or similar
-
   @override
   Future<void> onLoad() async {
     final frameRect = RectangleComponent(

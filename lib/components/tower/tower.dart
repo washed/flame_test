@@ -7,7 +7,7 @@ import 'package:flame_test/components/tower/bullet.dart';
 import 'package:flame_test/components/tower/target_acquisition.dart';
 import 'package:flame_test/main.dart';
 
-class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
+class Tower extends PositionComponent with HasGameRef<SpaceShooterGame> {
   static const double angleDeadzone = 0.025;
 
   final TargetAcquisition targetAcquisition;
@@ -16,6 +16,7 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   final double chargeConsumption;
   final double chargeEnergy;
 
+  late SpriteComponent towerSprite;
   late ChargeBar _chargeBar;
 
   double _chargedEnergy = 0.0;
@@ -57,20 +58,27 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await gameRef.loadSprite("player-sprite.png");
-
     anchor = Anchor.center;
-    width = 25;
+    width = 50;
     height = 50;
 
-    targetAcquisition.position = Vector2(width / 2, height / 2);
+    towerSprite = SpriteComponent()
+      ..sprite = await gameRef.loadSprite("player-sprite.png")
+      ..anchor = Anchor.center
+      ..width = 20
+      ..height = 40
+      ..position = Vector2(width / 2, height / 2);
 
-    add(targetAcquisition);
+    targetAcquisition.position =
+        Vector2(towerSprite.width / 2, towerSprite.height / 2);
+    towerSprite.add(targetAcquisition);
+
+    add(towerSprite);
 
     _chargeBar = ChargeBar()
       ..value = 0.0
       ..size = Vector2(40, 6)
-      ..position = Vector2(width / 2, 0)
+      ..position = Vector2(width / 2, height - 3)
       ..anchor = Anchor.center;
     add(_chargeBar);
   }
@@ -85,7 +93,7 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
       if (!solution) {
         final maxAngleDelta = turnRate * dt;
         final angleDelta = angleError.clamp(-maxAngleDelta, maxAngleDelta);
-        angle -= angleDelta;
+        towerSprite.angle -= angleDelta;
       }
     }
   }
@@ -110,7 +118,7 @@ class Tower extends SpriteComponent with HasGameRef<SpaceShooterGame> {
       chargedEnergy = chargedEnergy - chargeEnergy;
       parent?.add(Bullet(target: targetAcquisition.closestAcquiredTarget!)
         ..position = position
-        ..angle = angle);
+        ..angle = towerSprite.angle);
     }
   }
 }

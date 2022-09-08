@@ -14,7 +14,7 @@ import 'package:flame_test/components/tower/tower.dart';
 import 'package:flame_test/main.dart';
 
 class TargetAcquisition extends PositionComponent
-    with HasGameRef<SpaceShooterGame>, ParentIsA<Tower> {
+    with HasGameRef<SpaceShooterGame> {
   final double acquisitionRange;
   final double firingRange;
   final double angleDeadzone;
